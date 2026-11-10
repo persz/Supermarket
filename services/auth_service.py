@@ -6,7 +6,7 @@ class AuthService:
 
     def __init__(self, db_manager: DatabaseManager):
         self.db = db_manager
-        self.usuario_actual = None  # Guardará la sesión del usuario conectado
+        self.usuario_actual = None #Guardara la sesión del usuario conectado
 
     def registrar_usuario(
         self, nombre, correo, password, rol="cliente"
@@ -71,7 +71,8 @@ class AuthService:
             conn.close()
     def cerrar_sesion(self):
         self.usuario_actual = None
-        print("Sesión cerrada correctamente.")        
-        
+        print("Sesión cerrada correctamente.")       
+         
+    
 
         
