@@ -16,9 +16,9 @@ class MenuManager:
                 opcion = int(input("\n seleciona una opcion (1-3): ").strip())
                 match opcion:
                     case 1:
-                        self.menu.login()
+                        self._menu.login()
                     case 2:
-                        self.menu.registro()
+                        self._menu.registro()
                     case 3:
                         print("Gracias por utlizar el sistema...")
                         time.sleep(2)
