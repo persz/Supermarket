@@ -100,9 +100,9 @@ class InventarioService:
         if not conn:
             return False
         try:
-            with conn.cursor as cursor:
+            with conn.cursor() as cursor:
                 query = "DELETE FROM productos WHERE ID = %s"
-                cursor.execute(query,(producto_id,))\
+                cursor.execute(query,(producto_id,))
                     
                 if cursor.rowcount == 0:
                     print(f"no se encontro ningun producto con id {producto_id}")

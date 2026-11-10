@@ -61,7 +61,7 @@ class AuthService:
                         )
                     return True
                 else:
-                    print("[-] Correo o contraseña incorrectos.")
+                    print("Correo o contraseña incorrectos.")
                     return False
 
         except Exception as e:
