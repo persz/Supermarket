@@ -1,5 +1,5 @@
 from database.db_manager import DatabaseManager
-from moduls.producto import Producto  # o models.producto según tu carpeta
+from moduls.producto import Producto
 
 
 class InventarioService:
@@ -23,13 +23,13 @@ class InventarioService:
                 """
                 cursor.execute(query, (nombre, categoria, precio, stock))
 
-            # IMPORTANTE: commit se hace fuera del 'with cursor', pero dentro del 'try'
+            
             conn.commit()
-            print(f"[+] Producto '{nombre}' agregado exitosamente.")
+            print(f"roducto '{nombre}' agregado exitosamente")
             return True
 
         except Exception as e:
-            print(f"[-] ERROR al agregar el producto: {e}")
+            print(f"ERROR al agregar el producto: {e}")
             conn.rollback()
             return False
         finally:
@@ -48,9 +48,9 @@ class InventarioService:
                 cursor.execute(query)
                 filas = (
                     cursor.fetchall()
-                )  # fetchall se ejecuta DENTRO del 'with cursor'
+                )
 
-            # DENTRO del 'try': convertimos las tuplas recibidas en objetos Producto
+            #convertimos las tuplas recibidas en objetos Producto
             for fila in filas:
                 prod = Producto(
                     id=fila[0],
@@ -64,7 +64,7 @@ class InventarioService:
             return productos
 
         except Exception as e:
-            print(f"[-] ERROR al listar los productos: {e}")
+            print(f"ERROR al listar los productos: {e}")
             return []
         finally:
             conn.close()     
