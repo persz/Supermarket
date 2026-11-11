@@ -3,7 +3,7 @@ import time
 
 class MenuManager:
 
-    def __init__(self, auth_service, inventario_service):
+    def __init__(self, auth_service, inventario_service, venta_service):
         self.auth = auth_service
         self.inventario = inventario_service
         self.venta = venta_service

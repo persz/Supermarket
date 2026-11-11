@@ -4,7 +4,7 @@ from services.email_services import EmailFacturasService
 class VentaService:
     def __init__(self, db_manager: DatabaseManager):
         self.db = db_manager
-        self.email_services = EmailFacturasService()
+        self.email_service = EmailFacturasService()
         self.carrito = [] #lsita de dicts [{producto: x}, {cantidad: x}]
         
     def agregar_al_carrito(self,producto,cantidad: int) -> int:
@@ -43,7 +43,7 @@ class VentaService:
 
     def procesar_compra(self, usuario) -> bool:
         if not self.carrito:
-            print("[-] El carrito está vacío.")
+            print("El carrito está vacío.")
             return False
 
         conn = self.db.get_connection()
@@ -89,13 +89,13 @@ class VentaService:
                     })
 
             conn.commit()
-            print(f"\n[+] ¡Compra procesada exitosamente! Venta #{venta_id}")
+            print(f"\n¡Compra procesada exitosamente! Venta #{venta_id}")
 
             #Generar PDF y enviar factura por correo
             pdf_path = self.email_service.generar_pdf_factura(
                 venta_id, usuario.nombre, detalles_factura, total_venta
             )
-            print(f"[+] Factura PDF generada en: {pdf_path}")
+            print(f"Factura PDF generada en: {pdf_path}")
 
             self.email_service.enviar_factura_email(
                 usuario.correo, usuario.nombre, venta_id, pdf_path
@@ -106,7 +106,7 @@ class VentaService:
             return True
 
         except Exception as e:
-            print(f"[-] Error al procesar la compra: {e}")
+            print(f"Error al procesar la compra: {e}")
             conn.rollback()
             return False
         finally:
