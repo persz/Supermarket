@@ -19,13 +19,14 @@ class EmailFacturasService:
             os.makedirs("facturas")
         
         filepath = f"facturas/factura_{venta_id}.pdf"
-        doc = SimpleDocTemplate(filepath, pagesizes = letter)    
+        doc = SimpleDocTemplate(filepath, pagesizes = letter)
+        styles = getSampleStyleSheet()    
         story = [] 
         
         #creamos el encabezado de la factura
         story.append(Paragraph(f"<b> SUPERMARKET</b>", styles['title']))
-        story.append(Paragraph(f"Factura de compra de {venta_id}", styles['heading2']))   
-        story.append(Paragraph(f"<b>cliente: </b> {cliente_nombre}", styles['normal']))
+        story.append(Paragraph(f"Factura de compra de {venta_id}", styles['Heading2']))   
+        story.append(Paragraph(f"<b>cliente: </b> {cliente_nombre}", styles['Normal']))
         story.append(Spacer(1,15))
         
         #creo la tabla productos
@@ -57,35 +58,52 @@ class EmailFacturasService:
         doc.build(story)
         return filepath
     
-    def enviar_factura_email(self, destino_email: str, cliente_nombre: str, venta_id: int, pdf_path: str):
-        """ Envia la factura en PDF adjunta por correo eletronico"""
+    def enviar_factura_email(
+        self,
+        destino_email: str,
+        cliente_nombre: str,
+        venta_id: int,
+        pdf_path: str,
+    ):
+        """Envía la factura en PDF adjunta por correo electrónico."""
+        print(f"\nINICIANDO ENVÍO DE CORREO A {destino_email}...")
+
         if not self.email_user or not self.email_pass:
-            print("Credenciales incorrectas, intente de nuevo")
+            print(
+                f"ERROR CONFIGURACIÓN EMAIL: EMAIL_USER='{self.email_user}' o EMAIL_PASSWORD no encontrados en el .env"
+            )
             return
-    
-    try:
-        msg = MIMEMultipart()
-        msg['FROM'] = self.email_user
-        msg['To'] = destino_email
-        msg['Subject'] = f"Factura de compra #{venta_id} - Supermarket"
-        
-        cuerpo = f"Hola {cliente_nombre},\n\nAdjunto encontrarás la factura correspondiente a tu compra realizada en Supermarket Virtual.\n\n¡Gracias por tu preferencia!"
-        msg.attach(MIMEText(cuerpo, 'plain'))
-        
-        #Adjunto el pdf
-        with open(pdf_path, 'rb') as f:
-            adjunto = MIMEApplication(f.read(), _subtype = "pdf")
-            adjunto.add_header('Content-Disposition', 'attachment', filename=os.path.basename(pdf_path))
-            msg.attach(adjunto)
-        
-        #Conexion con el servidor SMTP (GMAIL)    
-        server = smtplib.SMTP('smtp.gmail.com', 587)
-        server.starttls()
-        server.login(self.email_user, self.email_pass)
-        server.send_message(msg)
-        server.quit()
-        
-        print(f"Factura se envio correctamente a {destino_email}")
-    except Exception as e:
-        print(f"Error al enviar factura {e}")        
+
+        try:
+            print(f"Conectando a servidor SMTP de Gmail...")
+            msg = MIMEMultipart()
+            msg["From"] = self.email_user
+            msg["To"] = destino_email
+            msg["Subject"] = f"Factura de Compra #{venta_id} - Supermarket Virtual"
+
+            cuerpo = (
+                f"Hola {cliente_nombre},\n\n"
+                f"Adjunto encontrarás la factura correspondiente a tu compra realizada en Supermarket Virtual.\n\n"
+                f"¡Gracias por tu preferencia!"
+            )
+            msg.attach(MIMEText(cuerpo, "plain"))
+
+            with open(pdf_path, "rb") as f:
+                adjunto = MIMEApplication(f.read(), _subtype="pdf")
+                adjunto.add_header(
+                    "Content-Disposition",
+                    "attachment",
+                    filename=os.path.basename(pdf_path),
+                )
+                msg.attach(adjunto)
+
+            server = smtplib.SMTP("smtp.gmail.com", 587)
+            server.starttls()
+            server.login(self.email_user, self.email_pass)
+            server.send_message(msg)
+            server.quit()
+
+            print(f"¡Factura enviada exitosamente a {destino_email}!")
+        except Exception as e:
+            print(f"ERROR SMTP al enviar el correo: {e}")       
         

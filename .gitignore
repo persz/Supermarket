@@ -13,3 +13,5 @@ __pycache__/
 #Archivos de cofiguracion del editor
 .vscode/
 .idea/
+
+facturas
