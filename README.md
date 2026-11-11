@@ -34,32 +34,27 @@ Aplicación modular en Python para la gestión de un supermercado virtual, desar
 
 ## Estructura del Proyecto
 
+```text
 Supermarket/
-│
 ├── database/
 │   ├── __init__.py
-│   └── db_manager.py         
-│
-├── facturas/                 
-│
+│   └── db_manager.py
+├── facturas/
 ├── moduls/
 │   ├── __init__.py
-│   ├── usuario.py           
-│   ├── producto.py           
-│   └── venta.py              
-│
+│   ├── usuario.py
+│   ├── producto.py
+│   └── venta.py
 ├── services/
 │   ├── __init__.py
-│   ├── auth_service.py       
-│   ├── inventario_service.py 
-│   ├── venta_service.py      
-│   └── email_service.py      
-│
+│   ├── auth_service.py
+│   ├── inventario_service.py
+│   ├── venta_service.py
+│   └── email_service.py
 ├── ui/
 │   ├── __init__.py
-│   └── menu.py               
-│
-├── .env                      
+│   └── menu.py
+├── .env
 ├── .gitignore
-├── main.py                   
-└── README.md                 
+├── main.py
+└── README.md         
