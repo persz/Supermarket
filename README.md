@@ -1,65 +1,65 @@
-# Supermarket Virtual - Sistema de Gestión en Consola
+# Supermarket - Sistema de Gestión y Facturación Automática
 
-Aplicación de consola en Python para la gestión de un supermercado virtual, construida bajo el paradigma de **Programación Orientada a Objetos (POO)** e integrada con una base de datos relacional **PostgreSQL**.
-
-El sistema cuenta con control de acceso basado en roles (`admin` y `cliente`), permitiendo administrar el catálogo de productos y navegar por el inventario disponible.
+Aplicación modular en Python para la gestión de un supermercado virtual, desarrollada bajo el paradigma de **Programación Orientada a Objetos (POO)** e integrada con una base de datos relacional **PostgreSQL**, generación de facturas en **PDF** y envío automático de recibos por **correo electrónico (SMTP)**.
 
 ---
 
 ## Características Principales
 
 * **Autenticación y Control de Roles:**
-  * Registro e inicio de sesión de usuarios.
-  * Roles diferenciados: `admin` (gestión completa) y `cliente` (consulta de catálogo).
+  * Registro e inicio de sesión seguro de usuarios.
+  * Roles diferenciados: `admin` (gestión completa de existencias) y `cliente` (catálogo y carrito).
 * **Gestión de Inventario (CRUD):**
-  * Agregar nuevos productos con categoría, precio y stock.
-  * Listar el catálogo completo de productos.
-  * Actualizar existencias (stock) de productos por ID.
-  * Eliminar productos de la base de datos.
-* **Arquitectura Modular:**
-  * Separación clara entre capa de datos, modelos POO, servicios de negocio e interfaz de consola.
-* **Persistencia Segura:**
-  * Uso de `psycopg2-binary` con consultas parametrizadas para prevenir inyecciones SQL.
-  * Manejo de credenciales mediante variables de entorno (`.env`).
+  * Alta, consulta, actualización de stock y eliminación de productos en PostgreSQL.
+* **Carrito de Compras y Ventas:**
+  * Gestión en memoria del carrito por cliente con control en tiempo real del stock disponible.
+  * Registro transaccional de ventas y detalle de productos (`ventas` y `detalle_ventas`).
+* **Facturación PDF y Envío Automático por Email:**
+  * Generación dinámica de facturas en formato PDF con `ReportLab`.
+  * Envío automático del recibo adjunto al correo electrónico registrado del cliente mediante `smtplib` (Gmail SMTP).
 
 ---
 
-##  Tecnologías Utilizadas
+## Tecnologías Utilizadas
 
 * **Lenguaje:** Python 3.x
 * **Base de Datos:** PostgreSQL
-* **Librerías principales:**
-  * `psycopg2-binary`: Conector para PostgreSQL.
-  * `python-dotenv`: Manejo seguro de variables de entorno.
+* **Librerías Principales:**
+  * `psycopg2-binary`: Conector relacional para PostgreSQL.
+  * `reportlab`: Generación y diseño de documentos PDF.
+  * `python-dotenv`: Manejo seguro de credenciales y variables de entorno.
+  * `smtplib` / `email`: Servicio integrado para comunicación por correo electrónico.
 
 ---
 
 ## Estructura del Proyecto
 
-```text
 Supermarket/
 │
 ├── database/
 │   ├── __init__.py
-│   └── db_manager.py         # Conexión y gestión de PostgreSQL
+│   └── db_manager.py         
+│
+├── facturas/                 
 │
 ├── moduls/
 │   ├── __init__.py
-│   ├── usuario.py            # Modelo POO de Usuario
-│   └── producto.py           # Modelo POO de Producto
+│   ├── usuario.py           
+│   ├── producto.py           
+│   └── venta.py              
 │
 ├── services/
 │   ├── __init__.py
-│   ├── auth_service.py       # Lógica de registro e inicio de sesión
-│   └── inventario_service.py # CRUD de productos en PostgreSQL
+│   ├── auth_service.py       
+│   ├── inventario_service.py 
+│   ├── venta_service.py      
+│   └── email_service.py      
 │
 ├── ui/
 │   ├── __init__.py
-│   └── menu.py               # Menú interactivo por consola
+│   └── menu.py               
 │
-├── .env                      # Variables de entorno 
+├── .env                      
 ├── .gitignore
-├── main.py                   # Punto de entrada de la aplicación
-├── README.md                 # Documentación del repositorio
-├── test_auth.py              # Script de prueba del servicio de autenticación
-└── test_inventario.py        # Script de prueba del servicio de inventario
+├── main.py                   
+└── README.md                 
