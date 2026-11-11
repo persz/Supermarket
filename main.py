@@ -1,21 +1,17 @@
 from database.db_manager import DatabaseManager
 from services.auth_service import AuthService
 from services.inventario_service import InventarioService
+from services.venta_service import VentaService
 from ui.menu import MenuManager
 
-
 def main():
-    #Inicializar la base de datos
     db = DatabaseManager()
 
-    #Inicializar servicios
     auth_service = AuthService(db)
     inventario_service = InventarioService(db)
+    venta_service = VentaService(db)
 
-    #Lanzar la interfaz de usuario
-    ui = MenuManager(auth_service, inventario_service)
-
-    
+    ui = MenuManager(auth_service, inventario_service, venta_service)
     ui.iniciar()
 
 

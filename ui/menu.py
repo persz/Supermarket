@@ -6,6 +6,7 @@ class MenuManager:
     def __init__(self, auth_service, inventario_service):
         self.auth = auth_service
         self.inventario = inventario_service
+        self.venta = venta_service
 
     def iniciar(self):
         while True:
@@ -133,20 +134,45 @@ class MenuManager:
             print("\n" + "-" * 35)
             print(f" PANEL DE CLIENTE ({self.auth.usuario_actual.nombre})")
             print("-" * 35)
-            print("1- Ver Catálogo de Productos")
-            print("2- Cerrar Sesión")
+            print("1-Ver Catálogo")
+            print("2-Agregar Producto al Carrito")
+            print("3-Ver Carrito y Total")
+            print("4-Finalizar Compra y Generar Factura")
+            print("5-Cerrar Sesión")
+
             try:
-                opcion = int(input("Elija una opción (1-2): ").strip())
+                opcion = int(input("\nElija una opción (1-5): ").strip())
                 match opcion:
                     case 1:
-                        print("\n--- Productos disponibles ---")
+                        productos = self.inventario.listar_productos()
+                        for p in productos:
+                            print(f"  {p}")
+
+                    case 2:
                         productos = self.inventario.listar_productos()
                         if not productos:
                             print("No hay productos disponibles.")
+                            continue
+                        
+                        prod_id = int(input("Ingrese el ID del producto que desea comprar: "))
+                        producto_sel = next((p for p in productos if p.id == prod_id), None)
+
+                        if producto_sel:
+                            cant = int(input(f"Cantidad para '{producto_sel.nombre}': "))
+                            self.venta.agregar_al_carrito(producto_sel, cant)
                         else:
-                            for p in productos:
-                                print(f"  {p}")
-                    case 2:
+                            print("[-] ID de producto no encontrado.")
+
+                    case 3:
+                        self.venta.ver_carrito()
+
+                    case 4:
+                        if self.venta.ver_carrito() > 0:
+                            confirmar = input("\n¿Desea confirmar su compra? (s/n): ").strip().lower()
+                            if confirmar == 's':
+                                self.venta.procesar_compra(self.auth.usuario_actual)
+
+                    case 5:
                         self.auth.cerrar_sesion()
                         break
                     case _:
