@@ -57,7 +57,7 @@ Supermarket/
 │   ├── __init__.py
 │   └── menu.py               # Menú interactivo por consola
 │
-├── .env                      # Variables de entorno (no subir a Git)
+├── .env                      # Variables de entorno 
 ├── .gitignore
 ├── main.py                   # Punto de entrada de la aplicación
 ├── README.md                 # Documentación del repositorio
